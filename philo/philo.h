@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/05/29 20:50:26 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:13:09 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_env
 	bool end_sim;     //
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
-	int				works;
 }					t_env;
 
 int					_atoi(char *str);
