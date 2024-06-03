@@ -7,6 +7,9 @@
 		"unistd.h": "c",
 		"stdio.h": "c",
 		"types.h": "c",
-		"philo.h": "c"
+		"philo.h": "c",
+		"stdlib.h": "c",
+		"stdbool.h": "c",
+		"pthread.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/05/30 16:13:09 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 17:26:07 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,41 @@
 #define PHILO_ERR "try something less than 200 philosephers\n"
 #define MALLOC_ERR "MALLOC FAILURE"
 
+typedef struct s_env	t_env;
+
 typedef struct s_philo
 {
-	long			last_eaten;
-	pthread_mutex_t	*rfork;
-	pthread_mutex_t	*lfork;
-	pthread_t		*thid;
-	bool			full;
-	int				id;
-}					t_philo;
+	unsigned long		last_eaten;
+	pthread_mutex_t		*rfork;
+	pthread_mutex_t		*lfork;
+	pthread_t			*thid;
+	unsigned long		start_sim;
+	bool				full;
+	int					id;
+	t_env				*env;
+}						t_philo;
 
 typedef struct s_env
 {
-	long tdie;        //
-	long teat;        //
-	long tsleep;      //
-	long nu_philos;   //
-	long meals_limit; //
-	long start_sim;   //
-	bool end_sim;     //
-	pthread_mutex_t	*forks;
-	t_philo			*philos;
-}					t_env;
+	unsigned long		tdie;
+	unsigned long		teat;
+	unsigned long		tsleep;
+	unsigned long		nu_philos;
+	unsigned long		meals_limit;
+	unsigned long		start_sim;
+	bool				end_sim;
+	pthread_mutex_t		*forks;
+	t_philo				*philos;
+}						t_env;
 
-int					_atoi(char *str);
+int						_atoi(char *str);
 
-int					valid_args(char **av, int ac);
+int						valid_args(char **av, int ac);
 
-void				*bytes_malloc(size_t bytes);
+void					*bytes_malloc(size_t bytes);
 
-void				handle_error(char *str, int flag);
+void					handle_error(char *str, int flag);
+
+void					*simulation(t_env *env);
+
+void					init_data(int ac, char **av, t_env *env);
