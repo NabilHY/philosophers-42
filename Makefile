@@ -4,7 +4,8 @@ INCLUDE = ./philo/philo.h
 SRCS = ./philo/philo.c \
 ./philo/srcs/utils.c \
 ./philo/srcs/init.c \
-./philo/srcs/simulation.c
+./philo/srcs/simulation.c \
+./philo/srcs/time.c
 OBJS = $(SRCS:.c=.o)
 NAME = falasifa
 ADDRESS = -fsanitize=address
