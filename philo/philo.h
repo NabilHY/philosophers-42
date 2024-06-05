@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/04 18:53:45 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/05 16:32:49 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ typedef struct s_env	t_env;
 typedef struct s_philo
 {
 	unsigned long		last_eaten;
-	pthread_mutex_t		rfork;
-	pthread_mutex_t		lfork;
+	unsigned long		times_eaten;
+	int					rfork;
+	int					lfork;
 	pthread_mutex_t		var;
 	pthread_t			thid;
 	unsigned long		start_sim;

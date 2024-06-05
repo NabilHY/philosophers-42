@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:54:17 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/04 19:48:49 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/05 20:00:56 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	suspend(unsigned long ms)
 	start_time = current_time();
 	expected_time = start_time + ms;
 	while (current_time() < expected_time)
-		usleep(10);
+		usleep(200);
 }
 
 unsigned long	timestamp(unsigned long start_time)

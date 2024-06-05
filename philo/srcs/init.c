@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:12:35 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/04 16:42:23 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/05 18:47:54 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,24 @@ void	init_forks(pthread_mutex_t *forks, int forks_count)
 
 void	init_philos(t_env *env)
 {
-	int		i;
-	t_philo	*philos;
+	int				i;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
 
 	i = 0;
 	philos = env->philos;
+	forks = env->forks;
 	while (i < env->nu_philos)
 	{
 		philos[i].full = false;
 		philos[i].id = i + 1;
-		philos[i].rfork = env->forks[i];
-		philos[i].lfork = env->forks[(i + 1) % env->nu_philos];
+		philos[i].lfork = i;
+		philos[i].rfork = (i + 1) % env->nu_philos;
 		philos[i].env = env;
+		if (env->meals_limit == -1)
+			philos[i].times_eaten = -1;
+		else
+			philos[i].times_eaten = env->meals_limit;
 		pthread_mutex_init(&philos[i].var, NULL);
 		i++;
 	}
@@ -56,6 +62,8 @@ void	init_env(t_env *env, char **av, int ac)
 	env->meals_limit = -1;
 	if (ac == 6)
 		env->meals_limit = _atoi(av[5]);
+	else
+		env->meals_limit = -1;
 	pthread_mutex_init(&env->print, NULL);
 }
 
