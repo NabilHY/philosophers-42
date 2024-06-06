@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:12:35 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/05 18:47:54 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:22:57 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	init_philos(t_env *env)
 			philos[i].times_eaten = -1;
 		else
 			philos[i].times_eaten = env->meals_limit;
-		pthread_mutex_init(&philos[i].var, NULL);
 		i++;
 	}
 }
@@ -57,14 +56,13 @@ void	init_env(t_env *env, char **av, int ac)
 	env->teat = _atoi(av[3]);
 	env->tsleep = _atoi(av[4]);
 	env->start_sim = 0;
-	env->end_sim = 0;
 	env->end_sim = false;
-	env->meals_limit = -1;
 	if (ac == 6)
 		env->meals_limit = _atoi(av[5]);
 	else
 		env->meals_limit = -1;
 	pthread_mutex_init(&env->print, NULL);
+	pthread_mutex_init(&env->update_elapsed, NULL);
 }
 
 void	init_data(int ac, char **av, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 18:44:39 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/05/29 12:39:32 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:13:43 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,6 @@ static int	isdigit(char c)
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
-}
-
-void	*bytes_malloc(size_t bytes)
-{
-	void	*mem;
-
-	mem = malloc(bytes);
-	if (!mem)
-		return (NULL);
-	return (mem);
 }
 
 void	handle_error(char *str, int flag)
@@ -64,7 +54,7 @@ int	_atoi(char *str)
 	return (-1);
 }
 
-int	valid_args(char **av, int ac)
+int	valid_args(int ac, char **av)
 {
 	int	i;
 	int	j;
@@ -87,10 +77,25 @@ int	valid_args(char **av, int ac)
 		}
 		i++;
 	}
-	if (_atoi(av[1]) > 200)
+	return (1);
+}
+
+int	check_args(int ac, char **av)
+{
+	if (!valid_args(ac, av))
 	{
-		printf("%s", PHILO_ERR);
-		exit(1);
+		printf("%s\n", FORMAT_ERR);
+		return (0);
+	}
+	if (_atoi(av[2]) < 60 || _atoi(av[3]) < 60 || _atoi(av[4]) < 60)
+	{
+		printf("%s\n", UNIT_ERR);
+		return (0);
+	}
+	else if (_atoi(av[1]) > 200)
+	{
+		printf("%s\n", PHILO_ERR);
+		return (0);
 	}
 	return (1);
 }

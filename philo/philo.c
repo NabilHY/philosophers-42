@@ -6,29 +6,26 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:57:56 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/05 19:59:35 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/06 15:58:46 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philo.h"
 
-// T E S D
-
 int	main(int ac, char **av)
 {
 	t_env			env;
+	int				correct_input;
 	t_philo			philos[200];
 	pthread_mutex_t	forks[200];
 
-	if ((ac == 5 || ac == 6) && valid_args(av, ac))
+	if ((ac == 5 || ac == 6) && check_args(ac, av))
 	{
 		env.philos = philos;
 		env.forks = forks;
 		init_data(ac, av, &env);
 		simulation(&env);
 	}
-	else
-		printf("%s", FORMAT_ERR);
 	return (0);
 }
 

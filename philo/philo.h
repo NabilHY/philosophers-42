@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/05 16:32:49 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:16:53 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include <unistd.h>
 
 #define FORMAT_ERR "Input Error\n"
-#define PHILO_ERR "try something less than 200 philosephers\n"
-#define MALLOC_ERR "MALLOC FAILURE"
+#define PHILO_ERR "Try something less than 200 philosephers\n"
+#define UNIT_ERR "Test with values greater than 60ms"
 
 typedef struct s_env	t_env;
 
@@ -29,7 +29,6 @@ typedef struct s_philo
 	unsigned long		times_eaten;
 	int					rfork;
 	int					lfork;
-	pthread_mutex_t		var;
 	pthread_t			thid;
 	unsigned long		start_sim;
 	bool				full;
@@ -39,12 +38,14 @@ typedef struct s_philo
 
 typedef struct s_env
 {
+	bool				correct_input;
 	unsigned long		tdie;
 	unsigned long		teat;
 	unsigned long		tsleep;
 	unsigned long		nu_philos;
 	unsigned long		meals_limit;
 	unsigned long		start_sim;
+	pthread_mutex_t		update_elapsed;
 	pthread_mutex_t		print;
 	bool				end_sim;
 	pthread_mutex_t		*forks;
@@ -52,10 +53,6 @@ typedef struct s_env
 }						t_env;
 
 int						_atoi(char *str);
-
-int						valid_args(char **av, int ac);
-
-void					*bytes_malloc(size_t bytes);
 
 void					handle_error(char *str, int flag);
 
@@ -68,3 +65,12 @@ unsigned long			current_time(void);
 void					suspend(unsigned long ms);
 
 unsigned long			timestamp(unsigned long start_time);
+
+int						check_args(int ac, char **av);
+
+void					monitor(t_env *env);
+
+int						threads_full(t_env *env);
+
+void					print_status(char state, unsigned long time, int id,
+							t_philo *ph);
