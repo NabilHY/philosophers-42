@@ -8,18 +8,19 @@ SRCS = ./philo/philo.c \
 ./philo/srcs/time.c \
 ./philo/srcs/monitor.c
 OBJS = $(SRCS:.c=.o)
-NAME = falasifa
+NAME = philo
 ADDRESS = -fsanitize=address
 THREAD = -fsanitize=thread
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(INCLUDE)
-	$(CC) $(FLAGS) $(THREAD) $(OBJS) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)
 fclean: clean
 	rm -rf $(NAME)
 re: fclean all
+
 .PHONY: PHILO

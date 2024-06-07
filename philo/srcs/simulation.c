@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:32:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/06 16:08:57 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 18:42:25 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,3 @@ void	*simulation(t_env *env)
 	}
 	return (NULL);
 }
-
-/*
-	To print the adaquate status we'll need
-	the current time , the philosepher number and its state
-	When a thread enters a routine
-	He'll either
-		Think : When they have finished eating
-		and now waiting for the mutexes to be unlocked
-		Eat : where both his fork and the target fork
-		are free to use he'll do it by locking both the
-		right and left mutexes
-		Sleep : where he had finished execting (eating)
-		then that thread enters stop executing
-*/

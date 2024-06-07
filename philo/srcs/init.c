@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:12:35 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/06 16:22:57 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 18:41:40 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	init_env(t_env *env, char **av, int ac)
 
 void	init_data(int ac, char **av, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	init_env(env, av, ac);
