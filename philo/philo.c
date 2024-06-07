@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:57:56 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 18:40:42 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 22:33:00 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,13 @@ int	main(int ac, char **av)
 		env.philos = philos;
 		env.forks = forks;
 		init_data(ac, av, &env);
-		simulation(&env);
+		if (!env.syscall_failure)
+			simulation(&env);
+		else
+		{
+			printf(SYSCALL_ERR);
+			return (1);
+		}
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:32:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 18:42:25 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 22:33:16 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,14 @@ void	*simulation(t_env *env)
 
 	i = 0;
 	env->start_sim = current_time();
+	printf("wtf\n");
 	while (i < env->nu_philos)
 	{
 		philo = &env->philos[i];
 		philo->start_sim = env->start_sim;
 		philo->last_eaten = env->start_sim;
 		if (pthread_create(&philo->thid, NULL, &routine, &env->philos[i]))
-			handle_error("Thread Creation Failure !", 0);
+			return (sim_failure(env));
 		i++;
 	}
 	while (env->end_sim == false && threads_full(env) == 0)
@@ -95,7 +96,7 @@ void	*simulation(t_env *env)
 	{
 		philo = &env->philos[i];
 		if (pthread_join(philo->thid, NULL))
-			handle_error("Thread Exectution Failure !", 0);
+			return (sim_failure(env));
 		i++;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 18:44:39 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/06 16:13:43 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 22:27:06 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ static int	isdigit(char c)
 	return (0);
 }
 
-void	handle_error(char *str, int flag)
+void	*sim_failure(t_env *env)
 {
-	if (flag == 0)
-		printf("%s\n", str);
-	exit(1);
+	env->syscall_failure = true;
+	return (NULL);
 }
 
 int	_atoi(char *str)

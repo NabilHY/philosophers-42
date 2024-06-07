@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/06 16:16:53 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/07 22:26:51 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #define FORMAT_ERR "Input Error\n"
 #define PHILO_ERR "Try something less than 200 philosephers\n"
 #define UNIT_ERR "Test with values greater than 60ms"
+#define SYSCALL_ERR "One of the syscall funtions has failed!"
 
 typedef struct s_env	t_env;
 
@@ -39,6 +40,7 @@ typedef struct s_philo
 typedef struct s_env
 {
 	bool				correct_input;
+	bool				syscall_failure;
 	unsigned long		tdie;
 	unsigned long		teat;
 	unsigned long		tsleep;
@@ -54,7 +56,7 @@ typedef struct s_env
 
 int						_atoi(char *str);
 
-void					handle_error(char *str, int flag);
+void					*sim_failure(t_env *env);
 
 void					*simulation(t_env *env);
 
