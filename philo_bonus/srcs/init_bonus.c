@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/09 19:55:07 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:01:42 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	init_env(t_env *env, char **av, int ac)
 	sem_unlink(ELAPSED);
 	env->update_elapsed = sem_open(ELAPSED, O_CREAT, 0777, 1);
 	sem_unlink(SEATED);
-	env->seated = sem_open(SEATED, O_CREAT, 0777, env->nu_philos);
+	env->seated = sem_open(SEATED, O_CREAT, 0644, 1)x;
+	sem_unlink(END_SIM);
+	env->sim_sem = sem_open(END_SIM, O_CREAT, 0644, 1);
 }
 
 void	init_data(int ac, char **av, t_env *env)

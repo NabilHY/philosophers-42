@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:07:57 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/06 16:26:47 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:36:01 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	monitor(t_env *env)
 		pthread_mutex_unlock(&env->update_elapsed);
 		if (elapsed > env->tdie)
 		{
-			print_status('D', env->philos[i].start_sim, env->philos[i].id,
-				&env->philos[i]);
+			print_status('D', env->philos[i].id, &env->philos[i]);
 			env->end_sim = true;
 			return ;
 		}

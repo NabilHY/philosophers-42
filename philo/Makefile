@@ -15,7 +15,7 @@ THREAD = -fsanitize=thread
 all: $(NAME)
 
 $(NAME): $(OBJS) $(INCLUDE)
-	$(CC) $(FLAGS) $(ADDRESS) $(OBJS)  -o $(NAME)
+	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)

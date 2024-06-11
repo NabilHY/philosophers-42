@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 22:26:51 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 15:17:37 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_philo
 	int					lfork;
 	pthread_t			thid;
 	unsigned long		start_sim;
-	bool				full;
 	int					id;
 	t_env				*env;
 }						t_philo;
@@ -74,5 +73,4 @@ void					monitor(t_env *env);
 
 int						threads_full(t_env *env);
 
-void					print_status(char state, unsigned long time, int id,
-							t_philo *ph);
+void					print_status(char state, int id, t_philo *ph);

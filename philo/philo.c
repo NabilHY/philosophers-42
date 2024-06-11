@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:57:56 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 22:33:00 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 15:17:48 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int ac, char **av)
 {
 	t_env			env;
-	int				correct_input;
 	t_philo			philos[200];
 	pthread_mutex_t	forks[200];
 

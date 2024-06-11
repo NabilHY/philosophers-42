@@ -10,6 +10,7 @@
 		"philo.h": "c",
 		"stdlib.h": "c",
 		"stdbool.h": "c",
-		"pthread.h": "c"
+		"pthread.h": "c",
+		"philo_bonus.h": "c"
 	}
 }

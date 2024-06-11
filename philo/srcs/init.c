@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:12:35 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 22:37:38 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 15:17:36 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	init_philos(t_env *env)
 	forks = env->forks;
 	while (i < env->nu_philos)
 	{
-		philos[i].full = false;
 		philos[i].id = i + 1;
 		philos[i].lfork = i;
 		philos[i].rfork = (i + 1) % env->nu_philos;

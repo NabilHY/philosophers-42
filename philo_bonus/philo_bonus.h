@@ -6,18 +6,18 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/09 18:44:17 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:10:25 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <semaphore.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <signal.h>
 
 #define FORMAT_ERR "Input Error\n"
 #define PHILO_ERR "Try something less than 200 philosephers\n"
@@ -27,6 +27,7 @@
 #define PRINT "/print"
 #define ELAPSED "/elapsed"
 #define SEATED "/seated"
+#define END_SIM "/end_sim"
 
 typedef struct s_env	t_env;
 
@@ -47,18 +48,19 @@ typedef struct s_env
 {
 	bool				correct_input;
 	bool				syscall_failure;
+	bool				end_sim;
 	unsigned long		tdie;
 	unsigned long		teat;
 	unsigned long		tsleep;
 	unsigned long		nu_philos;
 	unsigned long		meals_limit;
 	unsigned long		start_sim;
-	bool				end_sim;
-	t_philo				*philos;
 	sem_t				*update_elapsed;
 	sem_t				*forks;
 	sem_t				*print;
 	sem_t				*seated;
+		sem_t				*sim_sem;
+	t_philo				*philos;
 }						t_env;
 
 int						_atoi(char *str);
@@ -71,7 +73,7 @@ unsigned long			current_time(void);
 
 unsigned long			timestamp(unsigned long start_time);
 
-//void					monitor(t_env *env);
+// void					monitor(t_env *env);
 
 void					print_status(char state, int id, t_philo *ph);
 
