@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:07:57 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 20:36:01 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/12 16:27:39 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ int	threads_full(t_env *env)
 
 void	monitor(t_env *env)
 {
-	int		i;
-	long	elapsed;
-	t_philo	*philo;
+	int				i;
+	unsigned long	elapsed;
+	t_philo			*philo;
 
 	i = 0;
-	while (i < env->nu_philos)
+	while (i < env->nu_philos && env->end_sim == false)
 	{
 		philo = &env->philos[i];
-		pthread_mutex_lock(&env->update_elapsed);
+		pthread_mutex_lock(&philo->time_update);
 		elapsed = current_time() - (philo->last_eaten);
-		pthread_mutex_unlock(&env->update_elapsed);
+		pthread_mutex_unlock(&philo->time_update);
 		if (elapsed > env->tdie)
 		{
 			print_status('D', env->philos[i].id, &env->philos[i]);

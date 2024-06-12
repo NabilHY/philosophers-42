@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:12:35 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 15:17:36 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/12 16:31:21 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	init_forks(t_env *env, pthread_mutex_t *forks, int forks_count)
 		if (pthread_mutex_init(&forks[i], NULL))
 		{
 			env->syscall_failure = true;
-			return;
+			return ;
 		}
 		i++;
 	}
@@ -43,6 +43,12 @@ void	init_philos(t_env *env)
 		philos[i].lfork = i;
 		philos[i].rfork = (i + 1) % env->nu_philos;
 		philos[i].env = env;
+		philos[i].full = false;
+		if (pthread_mutex_init(&philos[i].time_update, NULL))
+		{
+			env->syscall_failure = true;
+			return ;
+		}
 		if (env->meals_limit == -1)
 			philos[i].times_eaten = -1;
 		else
@@ -67,12 +73,12 @@ void	init_env(t_env *env, char **av, int ac)
 	if (pthread_mutex_init(&env->print, NULL))
 	{
 		env->syscall_failure = true;
-		return;
+		return ;
 	}
 	if (pthread_mutex_init(&env->update_elapsed, NULL))
 	{
 		env->syscall_failure = true;
-		return;
+		return ;
 	}
 }
 
@@ -87,7 +93,7 @@ void	init_data(int ac, char **av, t_env *env)
 	else
 	{
 		env->syscall_failure = true;
-		return;
+		return ;
 	}
 	init_philos(env);
 }

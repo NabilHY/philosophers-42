@@ -6,11 +6,27 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:32:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 20:55:29 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/12 16:50:50 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+int	completed(t_env *env)
+{
+	int		i;
+	t_philo	*philos;
+
+	i = 0;
+	philos = env->philos;
+	while (i < env->nu_philos)
+	{
+		if (philos[i].full == false)
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	destroy_mutexes(t_env *env)
 {
@@ -63,14 +79,9 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	suspend_even(philo);
-	while (philo->times_eaten != 0 && !philo->env->end_sim)
+	while ((!philo->env->end_sim) && philo->times_eaten != 0)
 	{
-		//! A Case to be handled 99 900 200 200 5
-		//! Change meals limit mechanism
-		//! A philosepher should go about his meals
-		//! Program should exit onve eachs full boolean is set to true otherwise
-		//! philo keeps goig about his bussiness hhh
-			print_status('T', philo->id, philo);
+		print_status('T', philo->id, philo);
 		pthread_mutex_lock(&philo->env->forks[philo->lfork]);
 		print_status('F', philo->id, philo);
 		if (philo->env->nu_philos == 1)
@@ -79,8 +90,12 @@ void	*routine(void *arg)
 		print_status('F', philo->id, philo);
 		print_status('E', philo->id, philo);
 		suspend(philo->env->teat);
+		pthread_mutex_lock(&philo->time_update);
 		philo->last_eaten = current_time();
+		pthread_mutex_unlock(&philo->time_update);
 		philo->times_eaten--;
+		if (philo->times_eaten == 0)
+			philo->full = true;
 		pthread_mutex_unlock(&philo->env->forks[philo->lfork]);
 		pthread_mutex_unlock(&philo->env->forks[philo->rfork]);
 		print_status('S', philo->id, philo);
@@ -105,7 +120,7 @@ void	*simulation(t_env *env)
 			return (sim_failure(env));
 		i++;
 	}
-	while (env->end_sim == false && threads_full(env) == 0)
+	while (env->end_sim == false && !completed(env))
 		monitor(env);
 	i = 0;
 	while (i < env->nu_philos)
