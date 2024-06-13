@@ -6,13 +6,13 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 18:44:39 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/07 22:27:06 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:42:43 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static int	isdigit(char c)
+static int	_digit(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
@@ -39,7 +39,7 @@ int	_atoi(char *str)
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
-			sign *= -1;
+			return (0);
 		i++;
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
@@ -66,11 +66,11 @@ int	valid_args(int ac, char **av)
 			return (0);
 		if (av[i][j] == '+')
 			j++;
-		if (!isdigit(av[i][j]))
+		if (!_digit(av[i][j]))
 			return (0);
 		while (av[i][j])
 		{
-			if (!isdigit(av[i][j]))
+			if (!_digit(av[i][j]))
 				return (0);
 			j++;
 		}

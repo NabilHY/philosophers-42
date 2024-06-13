@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:57:56 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 15:17:48 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:44:59 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,17 @@ int	main(int ac, char **av)
 		env.forks = forks;
 		init_data(ac, av, &env);
 		if (!env.syscall_failure)
+		{
 			simulation(&env);
+			destroy_mutexes(&env);
+		}
 		else
 		{
 			printf(SYSCALL_ERR);
 			return (1);
 		}
 	}
+	else if (ac != 5 || ac != 6)
+		printf(ARG_ERR);
 	return (0);
 }

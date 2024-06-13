@@ -6,40 +6,11 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:32:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/13 12:44:42 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:30:35 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-int	completed(t_env *env)
-{
-	int		i;
-	t_philo	*philos;
-
-	i = 0;
-	philos = env->philos;
-	while (i < env->nu_philos)
-	{
-		if (philos[i].full == false)
-			return (0);
-		i++;
-	}
-	env->end_sim = true;
-	return (1);
-}
-
-void	destroy_mutexes(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (i < env->nu_philos)
-	{
-		pthread_mutex_destroy(&env->forks[i]);
-		i++;
-	}
-}
 
 void	print_status(char state, int id, t_philo *ph)
 {
@@ -65,13 +36,18 @@ void	print_status(char state, int id, t_philo *ph)
 	pthread_mutex_unlock(&ph->env->print);
 }
 
-void	suspend_even(t_philo *philo)
+void	start_eating(t_philo *ph)
 {
-	if (philo->id % 2 == 0)
-	{
-		print_status('S', philo->id, philo);
-		suspend(philo->env->tsleep);
-	}
+	print_status('E', ph->id, ph);
+	suspend(ph->env->teat);
+	pthread_mutex_lock(&ph->time_update);
+	ph->last_eaten = current_time();
+	pthread_mutex_unlock(&ph->time_update);
+	ph->times_eaten--;
+	if (ph->times_eaten == 0)
+		ph->full = true;
+	pthread_mutex_unlock(&ph->env->forks[ph->lfork]);
+	pthread_mutex_unlock(&ph->env->forks[ph->rfork]);
 }
 
 void	*routine(void *arg)
@@ -89,16 +65,7 @@ void	*routine(void *arg)
 			return (NULL);
 		pthread_mutex_lock(&philo->env->forks[philo->rfork]);
 		print_status('F', philo->id, philo);
-		print_status('E', philo->id, philo);
-		suspend(philo->env->teat);
-		pthread_mutex_lock(&philo->time_update);
-		philo->last_eaten = current_time();
-		pthread_mutex_unlock(&philo->time_update);
-		philo->times_eaten--;
-		if (philo->times_eaten == 0)
-			philo->full = true;
-		pthread_mutex_unlock(&philo->env->forks[philo->lfork]);
-		pthread_mutex_unlock(&philo->env->forks[philo->rfork]);
+		start_eating(philo);
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
 	}
@@ -131,6 +98,5 @@ void	*simulation(t_env *env)
 			return (sim_failure(env));
 		i++;
 	}
-	destroy_mutexes(env);
 	return (NULL);
 }

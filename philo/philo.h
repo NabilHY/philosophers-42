@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:58:00 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/12 16:31:28 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:46:52 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#define FORMAT_ERR "Input Error\n"
-#define PHILO_ERR "Try something less than 200 philosephers\n"
+#define ARG_ERR "Wrong Arguments Try this input format \
+: N T_die T_eat T_sleep [N_eat] All are positive values"
+#define FORMAT_ERR "Input Error"
+#define PHILO_ERR "Try something less than 200 philosephers"
 #define UNIT_ERR "Test with values greater than 60ms"
 #define SYSCALL_ERR "One of the syscall funtions has failed!"
 
@@ -26,9 +28,9 @@ typedef struct s_env	t_env;
 
 typedef struct s_philo
 {
+	pthread_mutex_t		time_update;
 	unsigned long		last_eaten;
 	unsigned long		times_eaten;
-	pthread_mutex_t		time_update;
 	unsigned long		start_sim;
 	pthread_t			thid;
 	t_env				*env;
@@ -50,9 +52,9 @@ typedef struct s_env
 	unsigned long		start_sim;
 	pthread_mutex_t		update_elapsed;
 	pthread_mutex_t		print;
-	bool				end_sim;
 	pthread_mutex_t		*forks;
 	t_philo				*philos;
+	bool				end_sim;
 }						t_env;
 
 int						_atoi(char *str);
@@ -76,3 +78,9 @@ void					monitor(t_env *env);
 int						threads_full(t_env *env);
 
 void					print_status(char state, int id, t_philo *ph);
+
+int						completed(t_env *env);
+
+void					destroy_mutexes(t_env *env);
+
+void					suspend_even(t_philo *philo);
