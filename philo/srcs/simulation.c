@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:32:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/12 16:50:50 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 12:44:42 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	completed(t_env *env)
 			return (0);
 		i++;
 	}
+	env->end_sim = true;
 	return (1);
 }
 
@@ -79,7 +80,7 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	suspend_even(philo);
-	while ((!philo->env->end_sim) && philo->times_eaten != 0)
+	while ((!philo->env->end_sim) && !completed(philo->env))
 	{
 		print_status('T', philo->id, philo);
 		pthread_mutex_lock(&philo->env->forks[philo->lfork]);
