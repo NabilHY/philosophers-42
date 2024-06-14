@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 20:01:42 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/13 23:29:47 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	init_philos(t_env *env)
 	{
 		philos[i].id = i + 1;
 		philos[i].env = env;
+		philos[i].start_sim = env->start_sim;
 		if (env->meals_limit == -1)
 			philos[i].times_eaten = -1;
 		else
@@ -33,11 +34,11 @@ void	init_philos(t_env *env)
 
 void	init_env(t_env *env, char **av, int ac)
 {
+	env->start_sim = 0;
 	env->nu_philos = _atoi(av[1]);
 	env->tdie = _atoi(av[2]);
 	env->teat = _atoi(av[3]);
 	env->tsleep = _atoi(av[4]);
-	env->start_sim = 0;
 	env->end_sim = false;
 	env->syscall_failure = false;
 	if (ac == 6)
@@ -51,7 +52,7 @@ void	init_env(t_env *env, char **av, int ac)
 	sem_unlink(ELAPSED);
 	env->update_elapsed = sem_open(ELAPSED, O_CREAT, 0777, 1);
 	sem_unlink(SEATED);
-	env->seated = sem_open(SEATED, O_CREAT, 0644, 1)x;
+	env->seated = sem_open(SEATED, O_CREAT, 0644, 1);
 	sem_unlink(END_SIM);
 	env->sim_sem = sem_open(END_SIM, O_CREAT, 0644, 1);
 }

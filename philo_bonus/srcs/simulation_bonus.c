@@ -6,37 +6,11 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 19:22:51 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/14 02:46:45 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
-
-void	print_status(char state, int id, t_philo *ph)
-{
-	sem_wait(ph->env->sim_sem);
-	sem_post(ph->env->print);
-	if (ph->env->end_sim == true)
-	{
-		sem_wait(ph->env->print);
-		return ;
-	}
-	if (state == 'T')
-		printf("%lu %u is thinking\n", timestamp(ph->start_sim), id);
-	else if (state == 'E')
-		printf("%lu %u is eating\n", timestamp(ph->start_sim), id);
-	else if (state == 'S')
-		printf("%lu %u is sleeping\n", timestamp(ph->start_sim), id);
-	else if (state == 'F')
-		printf("%lu %u has taken a fork\n", timestamp(ph->start_sim), id);
-	else if (state == 'D')
-	{
-		printf("%lu %u died\n", timestamp(ph->start_sim), id);
-		ph->env->end_sim = true;
-	}
-	sem_post(ph->env->print);
-	sem_post(ph->env->sim_sem);
-}
 
 void	kill_all(t_philo *philos, int philos_nu)
 {
@@ -50,19 +24,44 @@ void	kill_all(t_philo *philos, int philos_nu)
 	}
 }
 
+void	print_status(char state, int id, t_philo *ph)
+{
+	sem_wait(ph->env->print);
+	//sem_wait(ph->env->sim_sem);
+	//sem_post(ph->env->sim_sem);
+	if (!ph->env->end_sim)
+	{
+		if (state == 'T')
+			printf("%lu %u is thinking\n", timestamp(ph->start_sim), id);
+		else if (state == 'E')
+			printf("%lu %u is eating\n", timestamp(ph->start_sim), id);
+		else if (state == 'S')
+			printf("%lu %u is sleeping\n", timestamp(ph->start_sim), id);
+		else if (state == 'F')
+			printf("%lu %u has taken a fork\n", timestamp(ph->start_sim), id);
+		else if (state == 'D')
+		{
+			printf("%lu %u died\n", timestamp(ph->start_sim), id);
+			ph->env->end_sim = true;
+			//sem_wait(ph->env->sim_sem);
+		}
+	}
+	sem_post(ph->env->print);
+}
+
 void	*monitor(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	// printf("Monitor========\n");
-	while (1)
+	while (!philo->env->end_sim)
 	{
 		if ((current_time() - philo->last_eaten) >= philo->env->tdie)
 		{
+			print_status('D', philo->id, philo);
+			philo->env->end_sim = true;
 			sem_wait(philo->env->print);
 			sem_wait(philo->env->sim_sem);
-			printf("%lu %u died\n", timestamp(philo->start_sim), philo->id);
 			exit(1);
 		}
 	}
@@ -71,14 +70,12 @@ void	*monitor(void *arg)
 
 void	*philo_routine(t_philo *philo)
 {
-	sem_wait(philo->env->seated);
-	sem_post(philo->env->seated);
-	philo->last_eaten = current_time();
 	if (pthread_create(&philo->thid, NULL, monitor, (void *)philo))
 	{
 		printf("Error creating thread!\n");
-		exit(0);
+		exit(1);
 	}
+	//sem_wait(philo->env->sim_sem);
 	if (philo->id % 2 == 0)
 	{
 		print_status('S', philo->id, philo);
@@ -90,7 +87,10 @@ void	*philo_routine(t_philo *philo)
 		sem_wait(philo->env->forks);
 		print_status('F', philo->id, philo);
 		if (philo->env->nu_philos == 1)
-			return (NULL);
+		{
+			sem_post(philo->env->forks);
+			break ;
+		}
 		sem_wait(philo->env->forks);
 		print_status('F', philo->id, philo);
 		sem_wait(philo->env->update_elapsed);
@@ -104,42 +104,56 @@ void	*philo_routine(t_philo *philo)
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
 	}
+	//sem_post(philo->env->sim_sem);
 	pthread_join(philo->thid, NULL);
 	return (NULL);
 }
 
+void	destroy_sem(t_env *env)
+{
+	sem_close(env->update_elapsed);
+	sem_unlink(ELAPSED);
+	sem_close(env->forks);
+	sem_unlink(FORKS);
+	sem_close(env->print);
+	sem_unlink(PRINT);
+	sem_close(env->seated);
+	sem_unlink(SEATED);
+	sem_close(env->sim_sem);
+	sem_unlink(END_SIM);
+}
+
 void	*simulation(t_env *env)
 {
-	int i;
+	t_philo *philo;
 	int status;
 	pid_t *pid;
-	t_philo *philo;
-	long start = current_time();
+	int i;
 
 	i = 0;
-	sem_wait(env->seated);
+	env->start_sim = current_time();
 	while (i < env->nu_philos)
 	{
 		philo = &env->philos[i];
-		env->philos[i].psid = fork();
-		*pid = env->philos[i].psid;
-		if (!*pid)
+		philo->start_sim = env->start_sim;
+		philo->last_eaten = env->start_sim;
+		philo->psid = fork();
+		if (!philo->psid)
 		{
-			// printf("getpid: %d ,,, pid: %d\n", getpid(), *pid);
-			philo->start_sim = start;
 			philo_routine(&env->philos[i]);
 			exit(0);
 		}
 		i++;
+		//usleep(100);
 	}
 	i = 0;
-	sem_post(env->seated);
 	while (waitpid(-1, &status, 0))
 	{
 		if (status != 0)
 		{
 			kill_all(env->philos, env->nu_philos);
-			break ;
+			destroy_sem(env);
+			exit(1);
 		}
 	}
 	return (NULL);

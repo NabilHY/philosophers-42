@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/11 19:10:25 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/14 02:02:47 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_env
 	bool				correct_input;
 	bool				syscall_failure;
 	bool				end_sim;
+	int					st;
 	unsigned long		tdie;
 	unsigned long		teat;
 	unsigned long		tsleep;
@@ -59,7 +60,7 @@ typedef struct s_env
 	sem_t				*forks;
 	sem_t				*print;
 	sem_t				*seated;
-		sem_t				*sim_sem;
+	sem_t				*sim_sem;
 	t_philo				*philos;
 }						t_env;
 
