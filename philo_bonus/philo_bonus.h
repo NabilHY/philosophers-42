@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/14 02:02:47 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/14 19:47:44 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,33 @@ typedef struct s_philo
 	unsigned long		last_eaten;
 	unsigned long		times_eaten;
 	unsigned long		start_sim;
-	int					rfork;
-	int					lfork;
-	int					id;
 	pid_t				psid;
 	t_env				*env;
 	pthread_t			thid;
+	int					rfork;
+	int					lfork;
+	int					id;
 }						t_philo;
 
 typedef struct s_env
 {
-	bool				correct_input;
-	bool				syscall_failure;
-	bool				end_sim;
-	int					st;
 	unsigned long		tdie;
 	unsigned long		teat;
 	unsigned long		tsleep;
 	unsigned long		nu_philos;
 	unsigned long		meals_limit;
 	unsigned long		start_sim;
+	pthread_t			parent_monitor;
+	t_philo				*philos;
 	sem_t				*update_elapsed;
 	sem_t				*forks;
 	sem_t				*print;
 	sem_t				*seated;
 	sem_t				*sim_sem;
-	t_philo				*philos;
+	bool				correct_input;
+	bool				syscall_failure;
+	bool				end_sim;
+	int					st;
 }						t_env;
 
 int						_atoi(char *str);

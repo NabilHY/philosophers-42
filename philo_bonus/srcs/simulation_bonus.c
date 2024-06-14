@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/14 02:46:45 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/14 22:50:19 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	kill_all(t_philo *philos, int philos_nu)
 void	print_status(char state, int id, t_philo *ph)
 {
 	sem_wait(ph->env->print);
-	//sem_wait(ph->env->sim_sem);
-	//sem_post(ph->env->sim_sem);
 	if (!ph->env->end_sim)
 	{
 		if (state == 'T')
@@ -43,7 +41,7 @@ void	print_status(char state, int id, t_philo *ph)
 		{
 			printf("%lu %u died\n", timestamp(ph->start_sim), id);
 			ph->env->end_sim = true;
-			//sem_wait(ph->env->sim_sem);
+			return ;
 		}
 	}
 	sem_post(ph->env->print);
@@ -51,17 +49,16 @@ void	print_status(char state, int id, t_philo *ph)
 
 void	*monitor(void *arg)
 {
-	t_philo	*philo;
+	t_philo			*philo;
+	unsigned long	elapsed;
 
 	philo = (t_philo *)arg;
+	elapsed = current_time() - philo->last_eaten;
 	while (!philo->env->end_sim)
 	{
-		if ((current_time() - philo->last_eaten) >= philo->env->tdie)
+		if (elapsed >= philo->env->tdie)
 		{
 			print_status('D', philo->id, philo);
-			philo->env->end_sim = true;
-			sem_wait(philo->env->print);
-			sem_wait(philo->env->sim_sem);
 			exit(1);
 		}
 	}
@@ -74,12 +71,6 @@ void	*philo_routine(t_philo *philo)
 	{
 		printf("Error creating thread!\n");
 		exit(1);
-	}
-	//sem_wait(philo->env->sim_sem);
-	if (philo->id % 2 == 0)
-	{
-		print_status('S', philo->id, philo);
-		suspend(philo->env->tsleep);
 	}
 	while (philo->times_eaten != 0 && !philo->env->end_sim)
 	{
@@ -104,7 +95,6 @@ void	*philo_routine(t_philo *philo)
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
 	}
-	//sem_post(philo->env->sim_sem);
 	pthread_join(philo->thid, NULL);
 	return (NULL);
 }
@@ -144,9 +134,7 @@ void	*simulation(t_env *env)
 			exit(0);
 		}
 		i++;
-		//usleep(100);
 	}
-	i = 0;
 	while (waitpid(-1, &status, 0))
 	{
 		if (status != 0)
