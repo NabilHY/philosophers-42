@@ -6,10 +6,11 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/15 01:24:18 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 18:05:32 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <signal.h>
@@ -18,7 +19,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 #define FORMAT_ERR "Input Error\n"
 #define PHILO_ERR "Try something less than 200 philosephers\n"
@@ -29,6 +29,7 @@
 #define ELAPSED "/elapsed"
 #define SEATED "/seated"
 #define END_SIM "/end_sim"
+#define COMPLETION "/completion"
 
 typedef struct s_env	t_env;
 
@@ -60,6 +61,7 @@ typedef struct s_env
 	sem_t				*print;
 	sem_t				*seated;
 	sem_t				*sim_sem;
+	sem_t				*completion;
 	bool				correct_input;
 	bool				syscall_failure;
 	bool				end_sim;

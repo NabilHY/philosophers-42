@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 10:30:43 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 18:10:48 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,20 @@ void	*philo_routine(t_philo *philo)
 	{
 		for (int i = 0; i < philo->env->nu_philos; i++)
 			sem_post(philo->env->seated);
-		philo->last_eaten = current_time();
 	}
 	else
 		sem_wait(philo->env->seated);
-	philo->env->start_sim = current_time();
-	sem_wait(philo->env->update_elapsed);
 	philo->last_eaten = current_time();
-	sem_post(philo->env->update_elapsed);
-	philo->start_sim = current_time();
 	if (pthread_create(&philo->thid, NULL, monitor, (void *)philo))
 	{
 		printf("Error creating thread!\n");
 		exit(1);
+	}
+	philo->start_sim = philo->env->start_sim;
+	if (philo->id % 2 == 0)
+	{
+		print_status('S', philo->id, philo);
+		suspend(philo->env->tsleep);
 	}
 	while (philo->times_eaten != 0 && !philo->env->end_sim)
 	{
@@ -104,6 +105,11 @@ void	*philo_routine(t_philo *philo)
 		sem_post(philo->env->forks);
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
+		if (philo->times_eaten == 0)
+		{
+			sem_post(philo->env->completion);
+			exit(0);
+		}
 	}
 	pthread_join(philo->thid, NULL);
 	return (NULL);
@@ -121,6 +127,8 @@ void	destroy_sem(t_env *env)
 	sem_unlink(SEATED);
 	sem_close(env->sim_sem);
 	sem_unlink(END_SIM);
+	sem_close(env->completion);
+	sem_unlink(COMPLETION);
 }
 
 void	*simulation(t_env *env)
@@ -135,7 +143,7 @@ void	*simulation(t_env *env)
 	while (i < env->nu_philos)
 	{
 		philo = &env->philos[i];
-		philo->start_sim = env->start_sim;
+		// philo->start_sim = env->start_sim;
 		philo->psid = fork();
 		if (!philo->psid)
 		{
@@ -144,7 +152,6 @@ void	*simulation(t_env *env)
 		}
 		i++;
 	}
-	i = 0;
 	while (waitpid(-1, &status, 0))
 	{
 		if (status != 0)
@@ -153,6 +160,12 @@ void	*simulation(t_env *env)
 			destroy_sem(env);
 			exit(1);
 		}
+	}
+	i = 0;
+	while (i < env->nu_philos)
+	{
+		
+		i++;
 	}
 	return (NULL);
 }
