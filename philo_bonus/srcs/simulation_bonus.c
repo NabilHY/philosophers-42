@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/14 22:50:19 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 06:18:37 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void	*monitor(void *arg)
 	unsigned long	elapsed;
 
 	philo = (t_philo *)arg;
-	elapsed = current_time() - philo->last_eaten;
 	while (!philo->env->end_sim)
 	{
-		if (elapsed >= philo->env->tdie)
+		elapsed = current_time() - philo->last_eaten;
+		if (elapsed > philo->env->tdie)
 		{
 			print_status('D', philo->id, philo);
 			exit(1);
@@ -67,6 +67,7 @@ void	*monitor(void *arg)
 
 void	*philo_routine(t_philo *philo)
 {
+	philo->last_eaten = current_time();
 	if (pthread_create(&philo->thid, NULL, monitor, (void *)philo))
 	{
 		printf("Error creating thread!\n");
@@ -77,17 +78,10 @@ void	*philo_routine(t_philo *philo)
 		print_status('T', philo->id, philo);
 		sem_wait(philo->env->forks);
 		print_status('F', philo->id, philo);
-		if (philo->env->nu_philos == 1)
-		{
-			sem_post(philo->env->forks);
-			break ;
-		}
 		sem_wait(philo->env->forks);
 		print_status('F', philo->id, philo);
-		sem_wait(philo->env->update_elapsed);
 		philo->last_eaten = current_time();
 		philo->times_eaten--;
-		sem_post(philo->env->update_elapsed);
 		print_status('E', philo->id, philo);
 		suspend(philo->env->teat);
 		sem_post(philo->env->forks);
@@ -126,7 +120,6 @@ void	*simulation(t_env *env)
 	{
 		philo = &env->philos[i];
 		philo->start_sim = env->start_sim;
-		philo->last_eaten = env->start_sim;
 		philo->psid = fork();
 		if (!philo->psid)
 		{
@@ -135,6 +128,7 @@ void	*simulation(t_env *env)
 		}
 		i++;
 	}
+	i = 0;
 	while (waitpid(-1, &status, 0))
 	{
 		if (status != 0)

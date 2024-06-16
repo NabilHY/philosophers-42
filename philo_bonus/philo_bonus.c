@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:53:38 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/14 22:00:58 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 05:30:36 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ int	main(int ac, char **av)
 		return (0);
 	}
 }
+
+/*
+  5 800 200 200.
+ 4 310 200 100
+  4 410 200 200.
+*/
+
 /*
 Do not test with more than 200 philosophers.
 Do not test with time_to_die or time_to_eat or time_to_sleep set to values lower than 60 ms.

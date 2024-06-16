@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/14 19:47:44 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/15 01:24:18 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define FORMAT_ERR "Input Error\n"
 #define PHILO_ERR "Try something less than 200 philosephers\n"
