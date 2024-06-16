@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 18:05:32 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 20:07:33 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 #define ELAPSED "/elapsed"
 #define SEATED "/seated"
 #define END_SIM "/end_sim"
-#define COMPLETION "/completion"
+#define DEATH "/death"
+#define FULL "/full"
 
 typedef struct s_env	t_env;
 
@@ -54,18 +55,19 @@ typedef struct s_env
 	unsigned long		nu_philos;
 	unsigned long		meals_limit;
 	unsigned long		start_sim;
-	pthread_t			parent_monitor;
+	pthread_t			death_monitor;
+	pthread_t			food_monitor;
 	t_philo				*philos;
 	sem_t				*update_elapsed;
 	sem_t				*forks;
 	sem_t				*print;
 	sem_t				*seated;
-	sem_t				*sim_sem;
-	sem_t				*completion;
+	sem_t				*death;
+	sem_t				*full;
 	bool				correct_input;
 	bool				syscall_failure;
 	bool				end_sim;
-	int					st;
+	int					last_even;
 }						t_env;
 
 int						_atoi(char *str);

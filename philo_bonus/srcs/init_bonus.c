@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 18:05:58 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 20:04:06 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ void	init_philos(t_env *env)
 	}
 }
 
+int last_even(int number)
+{
+	if (number % 2 == 0)
+		return (number);
+	return (number - 1);
+}
+
 void	init_env(t_env *env, char **av, int ac)
 {
 	env->start_sim = 0;
@@ -41,6 +48,7 @@ void	init_env(t_env *env, char **av, int ac)
 	env->tsleep = _atoi(av[4]);
 	env->end_sim = false;
 	env->syscall_failure = false;
+	env->last_even = last_even(env->nu_philos);
 	env->start_sim = current_time();
 	if (ac == 6)
 		env->meals_limit = _atoi(av[5]);
@@ -54,10 +62,10 @@ void	init_env(t_env *env, char **av, int ac)
 	env->update_elapsed = sem_open(ELAPSED, O_CREAT, 0777, 1);
 	sem_unlink(SEATED);
 	env->seated = sem_open(SEATED, O_CREAT, 0644, 0);
-	sem_unlink(END_SIM);
-	env->sim_sem = sem_open(END_SIM, O_CREAT, 0644, 0);
-	sem_unlink(COMPLETION);
-	env->completion = sem_open(COMPLETION, O_CREAT, 0644, 0);
+	sem_unlink(DEATH);
+	env->death = sem_open(DEATH, O_CREAT, 0644, 0);
+	sem_unlink(FULL);
+	env->full = sem_open(FULL, O_CREAT, 0644, 0);
 }
 
 void	init_data(int ac, char **av, t_env *env)

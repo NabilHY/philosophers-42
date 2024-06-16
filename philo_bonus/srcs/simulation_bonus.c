@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 18:10:48 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 20:42:58 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	*monitor(void *arg)
 		if (elapsed >= philo->env->tdie)
 		{
 			print_status('D', philo->id, philo);
-			exit(1);
+			sem_post(philo->env->death);
+			exit(0);
 		}
 	}
 	return (NULL);
@@ -105,9 +106,9 @@ void	*philo_routine(t_philo *philo)
 		sem_post(philo->env->forks);
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
-		if (philo->times_eaten == 0)
+		if (philo->times_eaten == 0 && philo->id == philo->env->last_even)
 		{
-			sem_post(philo->env->completion);
+			sem_post(philo->env->full);
 			exit(0);
 		}
 	}
@@ -125,10 +126,40 @@ void	destroy_sem(t_env *env)
 	sem_unlink(PRINT);
 	sem_close(env->seated);
 	sem_unlink(SEATED);
-	sem_close(env->sim_sem);
-	sem_unlink(END_SIM);
-	sem_close(env->completion);
-	sem_unlink(COMPLETION);
+	sem_close(env->full);
+	sem_unlink(FULL);
+	sem_close(env->death);
+	sem_unlink(DEATH);
+}
+
+void	*food_monitor(void *arg)
+{
+	t_env	*env;
+	int		i;
+
+	i = 0;
+	env = (t_env *)arg;
+	if (env->nu_philos != -1)
+	{
+		sem_wait(env->full);
+		kill_all(env->philos, env->nu_philos);
+		destroy_sem(env);
+		exit(0);
+	}
+	return (NULL);
+}
+
+void	*death_monitor(void *arg)
+{
+	t_env	*env;
+	int		i;
+
+	i = 0;
+	env = (t_env *)arg;
+	sem_wait(env->full);
+	destroy_sem(env);
+	kill_all(env->philos, env->nu_philos);
+	exit(0);
 }
 
 void	*simulation(t_env *env)
@@ -144,6 +175,10 @@ void	*simulation(t_env *env)
 	{
 		philo = &env->philos[i];
 		// philo->start_sim = env->start_sim;
+		pthread_create(&env->death_monitor, NULL, &death_monitor, (void *)env);
+		pthread_create(&env->food_monitor, NULL, &food_monitor, (void *)env);
+		pthread_detach(env->death_monitor);
+		pthread_detach(env->food_monitor);
 		philo->psid = fork();
 		if (!philo->psid)
 		{
@@ -152,20 +187,8 @@ void	*simulation(t_env *env)
 		}
 		i++;
 	}
+
 	while (waitpid(-1, &status, 0))
-	{
-		if (status != 0)
-		{
-			kill_all(env->philos, env->nu_philos);
-			destroy_sem(env);
-			exit(1);
-		}
-	}
-	i = 0;
-	while (i < env->nu_philos)
-	{
-		
-		i++;
-	}
+		;
 	return (NULL);
 }
