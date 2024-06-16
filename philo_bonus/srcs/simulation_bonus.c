@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 06:18:37 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/16 10:30:43 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ void	*monitor(void *arg)
 	philo = (t_philo *)arg;
 	while (!philo->env->end_sim)
 	{
+		sem_wait(philo->env->update_elapsed);
 		elapsed = current_time() - philo->last_eaten;
-		if (elapsed > philo->env->tdie)
+		sem_post(philo->env->update_elapsed);
+		if (elapsed >= philo->env->tdie)
 		{
 			print_status('D', philo->id, philo);
 			exit(1);
@@ -67,7 +69,19 @@ void	*monitor(void *arg)
 
 void	*philo_routine(t_philo *philo)
 {
+	if (philo->id == philo->env->nu_philos)
+	{
+		for (int i = 0; i < philo->env->nu_philos; i++)
+			sem_post(philo->env->seated);
+		philo->last_eaten = current_time();
+	}
+	else
+		sem_wait(philo->env->seated);
+	philo->env->start_sim = current_time();
+	sem_wait(philo->env->update_elapsed);
 	philo->last_eaten = current_time();
+	sem_post(philo->env->update_elapsed);
+	philo->start_sim = current_time();
 	if (pthread_create(&philo->thid, NULL, monitor, (void *)philo))
 	{
 		printf("Error creating thread!\n");
@@ -80,7 +94,9 @@ void	*philo_routine(t_philo *philo)
 		print_status('F', philo->id, philo);
 		sem_wait(philo->env->forks);
 		print_status('F', philo->id, philo);
+		sem_wait(philo->env->update_elapsed);
 		philo->last_eaten = current_time();
+		sem_post(philo->env->update_elapsed);
 		philo->times_eaten--;
 		print_status('E', philo->id, philo);
 		suspend(philo->env->teat);
