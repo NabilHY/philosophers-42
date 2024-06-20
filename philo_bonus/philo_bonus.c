@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:53:38 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 11:47:29 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/20 10:56:14 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ Test with any values of your choice to verify all the requirements.Ensure philos
 	[100 800 200 200]
 	[105 800 200 200]
 	[200 800 200 200]
+
+	4 410 200 200 10
 
 */

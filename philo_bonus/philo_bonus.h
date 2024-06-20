@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 20:07:33 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:44:49 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #define END_SIM "/end_sim"
 #define DEATH "/death"
 #define FULL "/full"
+#define ENTRY "/entry"
 
 typedef struct s_env	t_env;
 
@@ -64,6 +65,7 @@ typedef struct s_env
 	sem_t				*seated;
 	sem_t				*death;
 	sem_t				*full;
+	sem_t				*entry;
 	bool				correct_input;
 	bool				syscall_failure;
 	bool				end_sim;

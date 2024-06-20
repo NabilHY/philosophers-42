@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/16 20:04:06 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:48:28 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	init_env(t_env *env, char **av, int ac)
 	env->death = sem_open(DEATH, O_CREAT, 0644, 0);
 	sem_unlink(FULL);
 	env->full = sem_open(FULL, O_CREAT, 0644, 0);
+	sem_unlink(ENTRY);
+	env->entry = sem_open(ENTRY, O_CREAT, 0644, 0);
 }
 
 void	init_data(int ac, char **av, t_env *env)
