@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/20 12:47:04 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/20 17:54:52 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	print_status(char state, int id, t_philo *ph)
 			printf("%lu %u has taken a fork\n", timestamp(ph->start_sim), id);
 		else if (state == 'D')
 		{
-			ph->env->end_sim = true;
-			printf("%lu %u died\n", timestamp(ph->start_sim), id);
+			//ph->env->end_sim = true;
+			suspend(200);
+			printf("%lu %u died\n", timestamp(ph->start_sim)-200, id);
 			sem_post(ph->env->death);
 			return ;
 		}
@@ -55,11 +56,14 @@ void	*monitor(void *arg)
 	philo = (t_philo *)arg;
 	while (!philo->env->end_sim)
 	{
+		//printf("id: %d elapsed %lu \n",philo->id, (current_time() - philo->last_eaten));
 		sem_wait(philo->env->update_elapsed);
 		if ((current_time() - philo->last_eaten) > philo->env->tdie)
+		{
 			print_status('D', philo->id, philo);
+			break ;
+		}
 		sem_post(philo->env->update_elapsed);
-		suspend(100);
 	}
 	return (NULL);
 }
