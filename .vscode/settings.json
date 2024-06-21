@@ -11,6 +11,7 @@
 		"stdlib.h": "c",
 		"stdbool.h": "c",
 		"pthread.h": "c",
-		"philo_bonus.h": "c"
+		"philo_bonus.h": "c",
+		"__config": "c"
 	}
 }
