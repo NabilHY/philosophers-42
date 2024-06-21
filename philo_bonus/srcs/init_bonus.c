@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/18 19:48:28 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/21 21:59:04 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@ void	init_philos(t_env *env)
 			philos[i].times_eaten = env->meals_limit;
 		i++;
 	}
-}
-
-int last_even(int number)
-{
-	if (number % 2 == 0)
-		return (number);
-	return (number - 1);
 }
 
 void	init_env(t_env *env, char **av, int ac)
@@ -66,13 +59,15 @@ void	init_env(t_env *env, char **av, int ac)
 	env->death = sem_open(DEATH, O_CREAT, 0644, 0);
 	sem_unlink(FULL);
 	env->full = sem_open(FULL, O_CREAT, 0644, 0);
-	sem_unlink(ENTRY);
-	env->entry = sem_open(ENTRY, O_CREAT, 0644, 0);
+	sem_unlink(EXIT);
+	env->exit = sem_open(EXIT, O_CREAT, 0644, 0);
+	sem_unlink(SIM);
+	env->sim = sem_open(SIM, O_CREAT, 0644, 1);
 }
 
 void	init_data(int ac, char **av, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	init_env(env, av, ac);

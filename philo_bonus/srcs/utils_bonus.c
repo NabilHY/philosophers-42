@@ -6,11 +6,18 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 16:34:54 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/13 15:55:32 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/21 15:07:48 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
+
+int	last_even(int number)
+{
+	if (number % 2 == 0)
+		return (number);
+	return (number - 1);
+}
 
 static int	isdigit(char c)
 {

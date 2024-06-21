@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"*.ejs": "html",
-		"*.html": "html",
-		"*.php": "php",
-		"philo_bonus.h": "c"
-	}
-}
