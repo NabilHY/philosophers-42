@@ -8,7 +8,7 @@ SRCS = ./philo_bonus.c \
 ./srcs/simulation_bonus.c \
 ./srcs/monitor_bonus.c
 OBJS = $(SRCS:.c=.o)
-NAME = philo
+NAME = philo_bonus
 ADDRESS = -fsanitize=address
 THREAD = -fsanitize=thread
 

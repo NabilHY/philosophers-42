@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:54:10 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/21 21:57:37 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/22 19:34:30 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ typedef struct s_env
 	sem_t				*update_elapsed;
 	sem_t				*forks;
 	sem_t				*print;
-	sem_t				*seated;
 	sem_t				*death;
 	sem_t				*full;
-	sem_t				*exit;
-	sem_t				*sim;
 	bool				correct_input;
 	bool				syscall_failure;
 	bool				end_sim;

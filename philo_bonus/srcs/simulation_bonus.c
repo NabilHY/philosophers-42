@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/21 22:47:47 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/22 19:53:26 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ void	eating(t_philo *philo)
 	sem_post(philo->env->forks);
 }
 
+void	drill(t_philo *philo)
+{
+	while (1)
+	{
+		if (philo->env->end_sim)
+			break ;
+		print_status('T', philo->id, philo);
+		eating(philo);
+		if (philo->times_eaten == 0 && philo->id == philo->env->last_even)
+		{
+			sem_post(philo->env->full);
+			break ;
+		}
+		print_status('S', philo->id, philo);
+		suspend(philo->env->tsleep);
+	}
+}
+
 void	*philo_routine(t_philo *philo)
 {
 	sem_wait(philo->env->update_elapsed);
@@ -64,20 +82,7 @@ void	*philo_routine(t_philo *philo)
 		print_status('S', philo->id, philo);
 		suspend(philo->env->tsleep);
 	}
-	while (1)
-	{
-		if (philo->times_eaten == 0 && philo->id == philo->env->last_even)
-		{
-			sem_post(philo->env->full);
-			break;
-		}
-		if (philo->env->end_sim)
-			break;
-		print_status('T', philo->id, philo);
-		eating(philo);
-		print_status('S', philo->id, philo);
-		suspend(philo->env->tsleep);
-	}
+	drill(philo);
 	pthread_join(philo->thid, NULL);
 	return (NULL);
 }
@@ -108,5 +113,6 @@ void	*simulation(t_env *env)
 		;
 	pthread_join(env->death_monitor, NULL);
 	pthread_join(env->food_monitor, NULL);
+	destroy_sem(env);
 	return (NULL);
 }

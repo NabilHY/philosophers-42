@@ -6,11 +6,25 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:19:48 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/21 21:59:04 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/22 19:34:49 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
+
+void	open_sems(t_env *env)
+{
+	sem_unlink(FORKS);
+	env->forks = sem_open(FORKS, O_CREAT, 0777, env->nu_philos);
+	sem_unlink(PRINT);
+	env->print = sem_open(PRINT, O_CREAT, 0777, 1);
+	sem_unlink(ELAPSED);
+	env->update_elapsed = sem_open(ELAPSED, O_CREAT, 0777, 1);
+	sem_unlink(DEATH);
+	env->death = sem_open(DEATH, O_CREAT, 0644, 0);
+	sem_unlink(FULL);
+	env->full = sem_open(FULL, O_CREAT, 0644, 0);
+}
 
 void	init_philos(t_env *env)
 {
@@ -47,22 +61,7 @@ void	init_env(t_env *env, char **av, int ac)
 		env->meals_limit = _atoi(av[5]);
 	else
 		env->meals_limit = -1;
-	sem_unlink(FORKS);
-	env->forks = sem_open(FORKS, O_CREAT, 0777, env->nu_philos);
-	sem_unlink(PRINT);
-	env->print = sem_open(PRINT, O_CREAT, 0777, 1);
-	sem_unlink(ELAPSED);
-	env->update_elapsed = sem_open(ELAPSED, O_CREAT, 0777, 1);
-	sem_unlink(SEATED);
-	env->seated = sem_open(SEATED, O_CREAT, 0644, 0);
-	sem_unlink(DEATH);
-	env->death = sem_open(DEATH, O_CREAT, 0644, 0);
-	sem_unlink(FULL);
-	env->full = sem_open(FULL, O_CREAT, 0644, 0);
-	sem_unlink(EXIT);
-	env->exit = sem_open(EXIT, O_CREAT, 0644, 0);
-	sem_unlink(SIM);
-	env->sim = sem_open(SIM, O_CREAT, 0644, 1);
+	open_sems(env);
 }
 
 void	init_data(int ac, char **av, t_env *env)
