@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:13:11 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/22 20:05:55 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/24 11:55:07 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	*food_monitor(void *arg)
 	env = (t_env *)arg;
 	sem_wait(env->full);
 	kill_all(env->philos, env->nu_philos);
+	destroy_sem(env);
 	exit(0);
 	return (NULL);
 }
@@ -46,6 +47,7 @@ void	*death_monitor(void *arg)
 	env = (t_env *)arg;
 	sem_wait(env->death);
 	kill_all(env->philos, env->nu_philos);
+	destroy_sem(env);
 	exit(0);
 	return (NULL);
 }
@@ -69,14 +71,9 @@ void	*monitor(void *arg)
 
 void	destroy_sem(t_env *env)
 {
-	sem_close(env->update_elapsed);
 	sem_unlink(ELAPSED);
-	sem_close(env->forks);
 	sem_unlink(FORKS);
-	sem_close(env->print);
 	sem_unlink(PRINT);
-	sem_close(env->full);
 	sem_unlink(FULL);
-	sem_close(env->death);
 	sem_unlink(DEATH);
 }

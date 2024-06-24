@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 16:34:54 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/21 15:07:48 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/24 11:50:13 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,9 @@ int	check_args(int ac, char **av)
 		printf("%s\n", PHILO_ERR);
 		return (0);
 	}
+	else if (!_atoi(av[1]))
+		return (0);
+	else if (ac == 6 && !_atoi(av[5]))
+		return (0);
 	return (1);
 }

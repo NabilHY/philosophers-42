@@ -6,7 +6,7 @@
 /*   By: nhayoun <nhayoun@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 11:23:25 by nhayoun           #+#    #+#             */
-/*   Updated: 2024/06/22 19:53:26 by nhayoun          ###   ########.fr       */
+/*   Updated: 2024/06/24 11:54:57 by nhayoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,7 @@ void	*simulation(t_env *env)
 		}
 		i++;
 	}
-	while (waitpid(-1, &status, 0))
-		;
 	pthread_join(env->death_monitor, NULL);
 	pthread_join(env->food_monitor, NULL);
-	destroy_sem(env);
 	return (NULL);
 }
